@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick, computed } from 'vue'
+import { ref, computed } from 'vue'
 import IpLookupRow from './components/IpLookupRow.vue'
 
 type Row = {
@@ -25,7 +25,7 @@ const rows = ref<Row[]>([
   },
 ])
 
-async function addRow() {
+function addRow() {
   const newId = `row-${nextId++}`
   rows.value.push({
     id: newId,
@@ -33,9 +33,6 @@ async function addRow() {
     ip: '',
     status: 'idle',
   })
-  await nextTick()
-  const input = document.getElementById(`ip-input-${newId}`)
-  input?.focus()
 }
 
 function updateRow(id: string, updates: Partial<Row>) {
@@ -82,9 +79,10 @@ const isAddDisabled = computed(() => {
 
         <div class="border-t border-gray-200 pt-4 space-y-3 pb-4" role="list" aria-label="IP address lookup rows">
           <IpLookupRow
-            v-for="row in rows"
+            v-for="(row, index) in rows"
             :key="row.id"
             :row="row"
+            :auto-focus="index === rows.length - 1 && rows.length > 1"
             @update="(updates: Partial<Row>) => updateRow(row.id, updates)"
           />
         </div>

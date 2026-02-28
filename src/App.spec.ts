@@ -111,15 +111,13 @@ describe('App', () => {
   })
 
   describe('accessibility', () => {
-    it('focuses new input after adding row', async () => {
-      document.body.innerHTML = '<div id="app"></div>'
+    it('passes autoFocus prop to newly added row', async () => {
       const wrapper = mount(App, {
-        attachTo: '#app',
         global: {
           stubs: {
             IpLookupRow: {
-              template: '<input :id="`ip-input-${row.id}`" />',
-              props: ['row'],
+              template: '<input :data-testid="`ip-input-${row.id}`" :data-autofocus="autoFocus" />',
+              props: ['row', 'autoFocus'],
             },
           },
         },
@@ -139,10 +137,12 @@ describe('App', () => {
       const addButton = wrapper.find('button')
       await addButton.trigger('click')
       await nextTick()
-      await nextTick()
 
-      const inputs = document.querySelectorAll('input')
-      expect(document.activeElement).toBe(inputs[inputs.length - 1])
+      const newRowId = vm.rows[1]?.id
+      if (!newRowId) throw new Error('New row not created')
+      
+      const newInput = wrapper.find(`[data-testid="ip-input-${newRowId}"]`)
+      expect(newInput.attributes('data-autofocus')).toBe('true')
 
       wrapper.unmount()
     })

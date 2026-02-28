@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import { useIpLookup } from '../composables/useIpLookup'
 import ZonedClockDisplay from './ZonedClockDisplay.vue'
 
@@ -16,12 +16,20 @@ type Row = {
   }
 }
 
-const props = defineProps<{ row: Row }>()
+const props = defineProps<{ row: Row; autoFocus?: boolean }>()
 const emit = defineEmits<{
   update: [updates: Partial<Row>]
 }>()
 
+const inputRef = ref<HTMLInputElement>()
 const isDisabled = computed(() => props.row.status === 'loading')
+
+watch(() => props.autoFocus, async (shouldFocus) => {
+  if (shouldFocus) {
+    await nextTick()
+    inputRef.value?.focus()
+  }
+}, { immediate: true })
 
 const { runLookup } = useIpLookup(
   () => props.row.ip,
@@ -50,7 +58,9 @@ function onBlur() {
     <div class="flex-1 min-w-0 relative">
       <label :for="`ip-input-${row.id}`" class="sr-only">IP address for row {{ row.label }}</label>
       <input
+        ref="inputRef"
         :id="`ip-input-${row.id}`"
+        :data-testid="`ip-input-${row.id}`"
         type="text"
         :value="row.ip"
         :disabled="isDisabled"

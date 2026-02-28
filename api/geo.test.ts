@@ -43,7 +43,7 @@ describe('geo API handler', () => {
       end() {},
     }
 
-    await handler(req as Parameters<typeof handler>[0], res as Parameters<typeof handler>[1])
+    await handler(req as unknown as Parameters<typeof handler>[0], res as unknown as Parameters<typeof handler>[1])
 
     expect(res.statusCode).toBe(200)
     expect(res.body).toEqual({
@@ -71,7 +71,7 @@ describe('geo API handler', () => {
       end: vi.fn(),
     }
 
-    await handler(req as Parameters<typeof handler>[0], res as Parameters<typeof handler>[1])
+    await handler(req as unknown as Parameters<typeof handler>[0], res as unknown as Parameters<typeof handler>[1])
 
     expect(res.statusCode).toBe(400)
     expect(res.body).toHaveProperty('error')
@@ -100,7 +100,7 @@ describe('geo API handler', () => {
       end: vi.fn(),
     }
 
-    await handler(req as Parameters<typeof handler>[0], res as Parameters<typeof handler>[1])
+    await handler(req as unknown as Parameters<typeof handler>[0], res as unknown as Parameters<typeof handler>[1])
 
     expect(res.statusCode).toBe(404)
     expect(res.body).toEqual({ error: 'Reserved range' })

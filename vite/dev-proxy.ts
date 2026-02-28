@@ -4,6 +4,7 @@
  */
 
 import type { Plugin } from 'vite'
+import type { IncomingMessage, ServerResponse } from 'http'
 import { lookupGeoByIp } from '../lib/geo-lookup'
 
 const HEADERS = {
@@ -14,7 +15,7 @@ export function devGeoProxy(): Plugin {
   return {
     name: 'api-geo-proxy',
     configureServer(server) {
-      server.middlewares.use('/api/geo', async (req, res) => {
+      server.middlewares.use('/api/geo', async (req: IncomingMessage, res: ServerResponse) => {
         const match = (req.url ?? '').match(/[?&]ip=([^&]+)/)
         const ip = match ? decodeURIComponent(match[1]) : ''
         const result = await lookupGeoByIp(ip)

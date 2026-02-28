@@ -85,7 +85,7 @@ const isAddDisabled = computed(() => {
             v-for="row in rows"
             :key="row.id"
             :row="row"
-            @update="(updates) => updateRow(row.id, updates)"
+            @update="(updates: Partial<Row>) => updateRow(row.id, updates)"
           />
         </div>
       </div>

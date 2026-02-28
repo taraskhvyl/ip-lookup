@@ -1,8 +1,10 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "yarn lint && yarn test && yarn build",
+  "devCommand": "yarn dev",
+  "installCommand": "yarn install",
+  "framework": null,
   "outputDirectory": "dist",
-  "framework": "vite",
-  "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
-  ]
+  "github": {
+    "silent": true
+  }
 }

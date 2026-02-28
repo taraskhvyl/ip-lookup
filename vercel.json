@@ -1,0 +1,15 @@
+{
+  "buildCommand": "yarn lint && yarn test && yarn build",
+  "devCommand": "yarn dev",
+  "installCommand": "yarn install",
+  "framework": null,
+  "outputDirectory": "dist",
+  "functions": {
+    "api/**/*.ts": {
+      "includeFiles": "lib/**"
+    }
+  },
+  "github": {
+    "silent": true
+  }
+}

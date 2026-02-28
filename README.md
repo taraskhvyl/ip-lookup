@@ -48,69 +48,68 @@ yarn test:watch
 yarn lint
 ```
 
-## Deployment Workflow
+## Deployment
 
-This project uses a **CI-first deployment strategy** to ensure code quality:
+### Automatic CI/CD with GitHub Actions
 
-### 1. GitHub Actions CI (Automatic)
+Every push to any branch triggers:
+1. ✅ Linting (`yarn lint`)
+2. ✅ Unit tests (`yarn test`)
+3. ✅ Type checking + Build (`yarn build`)
+4. 🚀 Auto-deploy to Vercel (if tests pass)
 
-Every push and PR triggers CI that runs:
-- ✅ Linting (`yarn lint`)
-- ✅ Unit tests (`yarn test`)
-- ✅ Type checking + Build (`yarn build`)
+**Deployment targets:**
+- Push to `main` → Production deployment
+- Push to other branches → Preview deployment
 
-### 2. Vercel Deployment (Manual)
+### Setup Required
 
-Vercel's automatic GitHub deployments are **disabled** (`git.deploymentEnabled: false` in `vercel.json`).
+Add these secrets to GitHub repo (Settings → Secrets and variables → Actions):
 
-**To deploy:**
-
-```bash
-# Install Vercel CLI (if not already installed)
-npm i -g vercel
-
-# Deploy to preview
-vercel
-
-# Deploy to production
-vercel --prod
-```
-
-**Why manual deployment?**
-- Ensures CI passes before deploying
-- Prevents broken code from reaching production
-- Gives you control over when to deploy
-- Vercel's TypeScript checking can differ from local/CI
+1. **VERCEL_TOKEN** - Get from https://vercel.com/account/tokens
+2. **VERCEL_ORG_ID** - From Vercel team/account settings
+3. **VERCEL_PROJECT_ID** - From Vercel project settings
 
 ### Vercel Configuration
 
-- **Build**: `yarn build` (no linting/testing in Vercel)
+- **Build**: `yarn build`
 - **Output**: `dist/` directory
 - **API Functions**: `api/**/*.ts` (serverless functions with rate limiting)
-- **GitHub Integration**: Disabled for manual control
 
 ## Project Structure
 
 ```
 ├── api/
-│   └── geo.ts              # Vercel serverless function (IP lookup proxy with rate limiting)
+│   ├── geo.ts              # Vercel serverless function
+│   └── geo.test.ts
 ├── lib/
-│   └── geo-lookup.ts       # Shared geolocation logic (server & dev proxy)
+│   ├── geo-lookup.ts       # Shared geolocation logic
+│   ├── geo-lookup.test.ts
+│   ├── rate-limiter.ts     # Rate limiting (10 req/min)
+│   ├── rate-limiter.test.ts
+│   ├── security.ts         # Origin validation & IP extraction
+│   └── security.test.ts
 ├── src/
 │   ├── api/
-│   │   └── geoClient.ts    # Frontend API client with caching
+│   │   ├── geoClient.ts    # Frontend API client with caching
+│   │   └── geoClient.test.ts
 │   ├── components/
 │   │   ├── IpLookupRow.vue
+│   │   ├── IpLookupRow.spec.ts
 │   │   └── ZonedClockDisplay.vue
 │   ├── composables/
 │   │   ├── useIpLookup.ts
-│   │   └── useZonedClock.ts
+│   │   ├── useIpLookup.test.ts
+│   │   ├── useZonedClock.ts # Single shared timer for all clocks
+│   │   └── useZonedClock.test.ts
 │   ├── utils/
-│   │   └── ip.ts           # IP validation utilities
+│   │   ├── ip.ts           # IP validation utilities
+│   │   └── ip.test.ts
 │   ├── App.vue
+│   ├── App.spec.ts
 │   └── main.ts
 ├── vite/
 │   └── dev-proxy.ts        # Vite dev server API proxy
-├── e2e/                    # Playwright e2e tests
-└── .github/workflows/      # CI pipeline
+└── .github/workflows/
+    └── ci.yml              # CI/CD pipeline
 ```

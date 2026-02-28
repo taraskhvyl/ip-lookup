@@ -47,8 +47,8 @@ function onBlur() {
 </script>
 
 <template>
-  <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 py-2" role="listitem">
-    <div class="flex items-center gap-2 sm:gap-3">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-0 sm:gap-3 py-2" role="listitem">
+    <div class="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-0">
       <div
         class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs sm:text-sm font-medium text-gray-600"
         :aria-label="`Row ${row.label}`"
@@ -69,7 +69,7 @@ function onBlur() {
           :aria-describedby="row.status === 'error' ? `error-${row.id}` : undefined"
           :aria-invalid="row.status === 'error'"
           :class="[
-            'w-full sm:w-auto px-3 sm:px-4 py-2 border rounded-lg text-sm sm:text-base text-gray-900 placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none',
+            'w-full sm:w-80 px-3 sm:px-4 py-2 border rounded-lg text-sm sm:text-base text-gray-900 placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none',
             row.status === 'error' ? 'border-red-500' : 'border-gray-300'
           ]"
           @input="onInput"

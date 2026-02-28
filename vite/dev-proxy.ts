@@ -3,31 +3,39 @@
  * Mimics the production Vercel serverless function behavior during local development.
  */
 
-import type { Plugin } from 'vite'
-import type { IncomingMessage, ServerResponse } from 'http'
-import { lookupGeoByIp } from '../lib/geo-lookup'
+import type { IncomingMessage, ServerResponse } from 'http';
+import type { Plugin } from 'vite';
+import { lookupGeoByIp } from '../lib/geo-lookup.js';
 
 const HEADERS = {
   'Content-Type': 'application/json',
-}
+  'Access-Control-Allow-Origin': 'http://localhost:5173',
+  'Access-Control-Allow-Methods': 'GET',
+};
 
 export function devGeoProxy(): Plugin {
   return {
     name: 'api-geo-proxy',
     configureServer(server) {
       server.middlewares.use('/api/geo', async (req: IncomingMessage, res: ServerResponse) => {
-        const match = (req.url ?? '').match(/[?&]ip=([^&]+)/)
-        const ip = match ? decodeURIComponent(match[1]) : ''
-        const result = await lookupGeoByIp(ip)
+        if (req.method !== 'GET') {
+          res.writeHead(405, HEADERS);
+          res.end(JSON.stringify({ error: 'Method not allowed' }));
+          return;
+        }
+
+        const match = (req.url ?? '').match(/[?&]ip=([^&]+)/);
+        const ip = match ? decodeURIComponent(match[1]) : '';
+        const result = await lookupGeoByIp(ip);
 
         if (result.success) {
-          res.writeHead(200, HEADERS)
-          res.end(JSON.stringify({ country: result.country, countryCode: result.countryCode, timezone: result.timezone }))
+          res.writeHead(200, HEADERS);
+          res.end(JSON.stringify({ country: result.country, countryCode: result.countryCode, timezone: result.timezone }));
         } else {
-          res.writeHead(result.status, HEADERS)
-          res.end(JSON.stringify({ error: result.error }))
+          res.writeHead(result.status, HEADERS);
+          res.end(JSON.stringify({ error: result.error }));
         }
-      })
+      });
     },
-  }
+  };
 }

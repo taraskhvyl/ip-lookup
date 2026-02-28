@@ -23,8 +23,8 @@ A Vue 3 + TypeScript web application that translates IP addresses into countries
 ## Development
 
 ```bash
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
 The app runs at `http://localhost:5173`. The `/api/geo` endpoint is proxied to ip-api.com during development via Vite middleware.
@@ -32,31 +32,62 @@ The app runs at `http://localhost:5173`. The `/api/geo` endpoint is proxied to i
 ## Build
 
 ```bash
-npm run build
+yarn build
 ```
 
 ## Tests
 
 ```bash
 # Unit tests
-npm run test
+yarn test
 
-# E2E tests (requires Playwright browsers: npx playwright install)
-npm run test:e2e
+# Watch mode
+yarn test:watch
+
+# Linting
+yarn lint
 ```
 
-## Deployment (Vercel)
+## Deployment Workflow
 
-1. Push to GitHub and connect the repo to Vercel
-2. Vercel will auto-detect the Vite project
-3. The `api/` folder is deployed as serverless functions
-4. Production uses the `/api/geo` proxy to ip-api.com with rate limiting
+This project uses a **CI-first deployment strategy** to ensure code quality:
 
-### Vercel GitHub Integration
+### 1. GitHub Actions CI (Automatic)
 
-- **Preview deployments**: Every PR gets a preview URL
-- **Production**: Deploys from the default branch on merge
-- **CI**: GitHub Actions runs lint, typecheck, unit tests, and e2e on push/PR
+Every push and PR triggers CI that runs:
+- ✅ Linting (`yarn lint`)
+- ✅ Unit tests (`yarn test`)
+- ✅ Type checking + Build (`yarn build`)
+
+### 2. Vercel Deployment (Manual)
+
+Vercel's automatic GitHub deployments are **disabled** (`git.deploymentEnabled: false` in `vercel.json`).
+
+**To deploy:**
+
+```bash
+# Install Vercel CLI (if not already installed)
+npm i -g vercel
+
+# Deploy to preview
+vercel
+
+# Deploy to production
+vercel --prod
+```
+
+**Why manual deployment?**
+- Ensures CI passes before deploying
+- Prevents broken code from reaching production
+- Gives you control over when to deploy
+- Vercel's TypeScript checking can differ from local/CI
+
+### Vercel Configuration
+
+- **Build**: `yarn build` (no linting/testing in Vercel)
+- **Output**: `dist/` directory
+- **API Functions**: `api/**/*.ts` (serverless functions with rate limiting)
+- **GitHub Integration**: Disabled for manual control
 
 ## Project Structure
 

@@ -9,7 +9,7 @@ const { time } = useZonedClock(props.timezone)
 </script>
 
 <template>
-  <span class="text-sm font-mono text-gray-700" :aria-label="`Current time in ${timezone}`">
+  <span class="text-xs sm:text-sm font-mono text-gray-700" :aria-label="`Current time in ${timezone}`">
     {{ time }}
   </span>
 </template>

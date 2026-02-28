@@ -49,8 +49,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       countryCode: result.countryCode,
       timezone: result.timezone,
     });
-    return;
+  } else {
+    res.status(result.status).json({ error: result.error });
   }
-
-  res.status(result.status).json({ error: result.error });
 }

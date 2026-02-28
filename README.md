@@ -2,6 +2,8 @@
 
 A Vue 3 + TypeScript web application that translates IP addresses into countries with real-time local clocks.
 
+[![CI](https://github.com/taraskhvyl/ip-lookup/actions/workflows/ci.yml/badge.svg)](https://github.com/taraskhvyl/ip-lookup/actions/workflows/ci.yml)
+
 ## Features
 
 - Add multiple IP lookup rows

@@ -7,4 +7,12 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #e5e7eb;
+  padding: 1rem 0;
+}
+
+@media (max-width: 640px) {
+  body {
+    align-items: flex-start;
+    padding: 0.5rem 0;
+  }
 }

@@ -56,20 +56,20 @@ const isAddDisabled = computed(() => {
 </script>
 
 <template>
-  <div class="w-full max-w-2xl mx-4">
+  <div class="w-full max-w-2xl mx-2 sm:mx-4">
     <div class="bg-white rounded-lg border border-gray-300 shadow-sm overflow-hidden">
-      <header class="px-6 py-4 border-b border-gray-200">
-        <h1 class="text-xl font-bold text-gray-900">IP Lookup</h1>
+      <header class="px-3 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
+        <h1 class="text-lg sm:text-xl font-bold text-gray-900">IP Lookup</h1>
       </header>
 
-      <div class="px-6 py-4 space-y-4">
-        <p class="text-sm text-gray-600">Enter one or more IP addresses and get their country</p>
+      <div class="px-3 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
+        <p class="text-xs sm:text-sm text-gray-600">Enter one or more IP addresses and get their country</p>
 
         <button
           type="button"
           @click="addRow"
           :disabled="isAddDisabled"
-          class="inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="inline-flex items-center gap-2 px-3 sm:px-4 py-2 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           :class="isAddDisabled ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'"
           aria-label="Add new IP address row"
         >
@@ -77,7 +77,7 @@ const isAddDisabled = computed(() => {
           Add
         </button>
 
-        <div class="border-t border-gray-200 pt-4 space-y-3 pb-4" role="list" aria-label="IP address lookup rows">
+        <div class="border-t border-gray-200 pt-3 sm:pt-4 space-y-3 pb-3 sm:pb-4" role="list" aria-label="IP address lookup rows">
           <IpLookupRow
             v-for="(row, index) in rows"
             :key="row.id"

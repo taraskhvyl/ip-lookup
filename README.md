@@ -80,24 +80,36 @@ Add these secrets to GitHub repo (Settings → Secrets and variables → Actions
 
 ```
 ├── api/
-│   └── geo.ts              # Vercel serverless function (IP lookup proxy with rate limiting)
+│   ├── geo.ts              # Vercel serverless function
+│   └── geo.test.ts
 ├── lib/
-│   └── geo-lookup.ts       # Shared geolocation logic (server & dev proxy)
+│   ├── geo-lookup.ts       # Shared geolocation logic
+│   ├── geo-lookup.test.ts
+│   ├── rate-limiter.ts     # Rate limiting (10 req/min)
+│   ├── rate-limiter.test.ts
+│   ├── security.ts         # Origin validation & IP extraction
+│   └── security.test.ts
 ├── src/
 │   ├── api/
-│   │   └── geoClient.ts    # Frontend API client with caching
+│   │   ├── geoClient.ts    # Frontend API client with caching
+│   │   └── geoClient.test.ts
 │   ├── components/
 │   │   ├── IpLookupRow.vue
+│   │   ├── IpLookupRow.spec.ts
 │   │   └── ZonedClockDisplay.vue
 │   ├── composables/
 │   │   ├── useIpLookup.ts
-│   │   └── useZonedClock.ts
+│   │   ├── useIpLookup.test.ts
+│   │   ├── useZonedClock.ts # Single shared timer for all clocks
+│   │   └── useZonedClock.test.ts
 │   ├── utils/
-│   │   └── ip.ts           # IP validation utilities
+│   │   ├── ip.ts           # IP validation utilities
+│   │   └── ip.test.ts
 │   ├── App.vue
+│   ├── App.spec.ts
 │   └── main.ts
 ├── vite/
 │   └── dev-proxy.ts        # Vite dev server API proxy
-├── e2e/                    # Playwright e2e tests
-└── .github/workflows/      # CI pipeline
+└── .github/workflows/
+    └── ci.yml              # CI/CD pipeline
 ```

@@ -5,7 +5,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { lookupGeoByIp } from '../lib/geo-lookup';
+import { lookupGeoByIp } from '../lib/geo-lookup.js';
 
 const rateMap = new Map<string, { count: number; resetAt: number; }>();
 const RATE_LIMIT = 10;
@@ -42,7 +42,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       countryCode: result.countryCode,
       timezone: result.timezone,
     });
-  } else {
-    res.status(result.status).json({ error: result.error });
+    return;
   }
+
+  res.status(result.status).json({ error: result.error });
 }

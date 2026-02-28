@@ -4,6 +4,11 @@
   "installCommand": "yarn install",
   "framework": null,
   "outputDirectory": "dist",
+  "functions": {
+    "api/**/*.ts": {
+      "includeFiles": "lib/**"
+    }
+  },
   "github": {
     "silent": true
   }

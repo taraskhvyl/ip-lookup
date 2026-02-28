@@ -3,6 +3,8 @@
  * Verifies time formatting and basic functionality.
  */
 
+/* eslint-disable vue/one-component-per-file */
+
 import { describe, it, expect } from 'vitest'
 import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'

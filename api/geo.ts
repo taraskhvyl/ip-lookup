@@ -4,7 +4,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { lookupGeoByIp } from '../lib/geo-lookup.js';
+import { lookupGeoByIp, type GeoResult } from '../lib/geo-lookup.js';
 import { isOriginAllowed, getClientIp } from '../lib/security.js';
 import { RateLimiter } from '../lib/rate-limiter.js';
 
@@ -41,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   }
 
   const ip = typeof req.query.ip === 'string' ? req.query.ip : req.query.ip?.[0];
-  const result = await lookupGeoByIp(ip ?? '');
+  const result: GeoResult = await lookupGeoByIp(ip ?? '');
 
   if (result.success) {
     res.status(200).json({

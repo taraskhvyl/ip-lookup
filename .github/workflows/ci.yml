@@ -2,9 +2,6 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
 
 jobs:
   test:
@@ -37,7 +34,6 @@ jobs:
     name: Deploy to Vercel
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     
     steps:
       - name: Checkout code
